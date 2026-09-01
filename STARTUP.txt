@@ -1,0 +1,13 @@
+App Service > Configuration > General settings > Startup Command:
+
+    node server.js
+
+App Service > Monitoring > Health check:
+
+    /healthz
+
+App Settings that must exist in production:
+
+    NODE_ENV=production
+    JWT_SECRET=<32+ random characters, or a Key Vault reference>
+    DATABASE_URL=<postgres connection string>

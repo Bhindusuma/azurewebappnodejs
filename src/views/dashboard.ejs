@@ -1,0 +1,50 @@
+<%- include('partials/head') %>
+<div class="shell">
+  <section class="opening" style="padding-bottom:1.5rem">
+    <h1>Pick up where you stopped, <%= user.name.split(' ')[0] %>.</h1>
+  </section>
+
+  <% if (cards.length === 0) { %>
+    <div class="empty">
+      <h2>No courses yet</h2>
+      <p>Enrol in a course and it will appear here with your place in it saved.</p>
+      <p style="margin-top:1.25rem"><a class="btn" href="/catalog">Browse the courses</a></p>
+    </div>
+  <% } else { %>
+    <div class="stack">
+      <% cards.forEach(function (card) { %>
+        <article class="resume">
+          <h3><a href="/courses/<%= card.course.slug %>"><%= card.course.title %></a></h3>
+          <%- include('partials/spine', { lessons: card.lessons, completed: card.completed, total: card.total }) %>
+          <div class="resume__next">
+            <% if (card.completed === card.total) { %>
+              <span class="done-note">Course finished</span>
+              <p>Revisit any lesson from the course page.</p>
+            <% } else { %>
+              <a class="btn" href="/courses/<%= card.course.slug %>/lessons/<%= card.nextLesson.slug %>">
+                <%= card.completed === 0 ? 'Start lesson 1' : 'Continue' %>
+              </a>
+              <p><%= card.nextLesson.title %> · <%= card.nextLesson.minutes %> min</p>
+            <% } %>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <% if (suggestions.length) { %>
+    <div class="section-head"><h2>Also available</h2></div>
+    <ul class="courses">
+      <% suggestions.forEach(function (c) { %>
+        <li>
+          <a class="course-row" href="/courses/<%= c.slug %>">
+            <h3><%= c.title %></h3>
+            <div class="figures"><div class="meta"><%= c.lesson_count %> lessons</div></div>
+            <p><%= c.subtitle %></p>
+          </a>
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
+</div>
+<%- include('partials/foot') %>

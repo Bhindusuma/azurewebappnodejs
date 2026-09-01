@@ -1,0 +1,46 @@
+<%- include('partials/head') %>
+<div class="shell">
+  <section class="opening" style="padding-bottom:1.5rem">
+    <h1><%= course.title %></h1>
+    <p><%= course.description %></p>
+    <div class="meta" style="margin-top:1rem">
+      <%= course.level %> · Taught by <%= course.instructor %> · <%= total %> lessons · about <%= Math.round(course.minutes / 60) %> hours
+    </div>
+
+    <% if (enrolled) { %>
+      <%- include('partials/spine', { lessons: lessons, completed: completed, total: total }) %>
+    <% } %>
+
+    <div class="actions">
+      <% if (!user) { %>
+        <a class="btn" href="/login?next=/courses/<%= course.slug %>">Sign in to enrol</a>
+      <% } else if (!enrolled) { %>
+        <form method="post" action="/courses/<%= course.slug %>/enroll">
+          <button class="btn" type="submit">Enrol and start</button>
+        </form>
+      <% } else if (nextLesson) { %>
+        <a class="btn" href="/courses/<%= course.slug %>/lessons/<%= nextLesson.slug %>">
+          <%= completed === 0 ? 'Start lesson 1' : 'Continue' %>
+        </a>
+      <% } %>
+    </div>
+  </section>
+
+  <div class="section-head"><h2>Lessons</h2></div>
+  <ul class="courses">
+    <% lessons.forEach(function (l) { %>
+      <li>
+        <% var href = enrolled ? ('/courses/' + course.slug + '/lessons/' + l.slug) : null; %>
+        <<%= href ? 'a' : 'div' %> class="course-row" <%- href ? 'href="' + href + '"' : '' %>>
+          <h3><%= l.position %>. <%= l.title %></h3>
+          <div class="figures">
+            <div class="meta"><%= l.minutes %> min</div>
+            <% if (l.done) { %><div class="done-note">Complete</div><% } %>
+          </div>
+          <p><%= l.summary %></p>
+        </<%= href ? 'a' : 'div' %>>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+<%- include('partials/foot') %>

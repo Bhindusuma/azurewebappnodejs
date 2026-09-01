@@ -1,0 +1,4 @@
+<div class="spine" role="img" aria-label="<%= completed %> of <%= total %> lessons complete">
+  <% lessons.forEach(function (l) { %><span data-done="<%= l.done %>"></span><% }); %>
+</div>
+<p class="spine-count"><%= completed %> of <%= total %> lessons complete</p>

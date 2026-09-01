@@ -1,0 +1,35 @@
+<%- include('partials/head') %>
+<div class="shell">
+  <section class="opening">
+    <h1>Learn a craft in short sittings.</h1>
+    <p>Three courses, twelve lessons, each one written to be finished in a single
+       sitting and to leave you with something that works. Your place is saved as
+       you go, so a week off costs you nothing.</p>
+    <div class="actions">
+      <a class="btn" href="/register">Create an account</a>
+      <a href="/catalog">Look at the courses first</a>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <h2>Courses</h2>
+    <span class="meta">Updated this term</span>
+  </div>
+
+  <ul class="courses">
+    <% courses.forEach(function (c) { %>
+      <li>
+        <a class="course-row" href="/courses/<%= c.slug %>">
+          <h3><%= c.title %></h3>
+          <div class="figures">
+            <div class="meta"><%= c.lesson_count %> lessons</div>
+            <div class="meta"><%= Math.round(c.minutes / 60) %> hours</div>
+          </div>
+          <p><%= c.subtitle %> — <%= c.description %></p>
+          <div class="meta"><%= c.level %> · Taught by <%= c.instructor %></div>
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+<%- include('partials/foot') %>

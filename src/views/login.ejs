@@ -1,0 +1,23 @@
+<%- include('partials/head') %>
+<div class="shell form-page">
+  <h1>Sign in</h1>
+  <p class="lede">Your place in every course is waiting.</p>
+
+  <% if (error) { %><div class="alert"><%= error %></div><% } %>
+
+  <form method="post" action="/login">
+    <input type="hidden" name="next" value="<%= next %>">
+    <label class="field">
+      <span>Email</span>
+      <input type="email" name="email" autocomplete="email" required value="<%= values.email || '' %>">
+    </label>
+    <label class="field">
+      <span>Password</span>
+      <input type="password" name="password" autocomplete="current-password" required>
+    </label>
+    <button class="btn" type="submit">Sign in</button>
+  </form>
+
+  <p class="meta" style="margin-top:2rem">No account yet? <a href="/register">Create one</a>.</p>
+</div>
+<%- include('partials/foot') %>

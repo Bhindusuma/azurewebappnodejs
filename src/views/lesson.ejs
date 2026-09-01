@@ -1,0 +1,61 @@
+<%- include('partials/head') %>
+<div class="shell reader">
+  <aside class="outline">
+    <span class="meta"><a href="/courses/<%= course.slug %>" style="text-decoration:none"><%= course.title %></a></span>
+    <ol>
+      <% lessons.forEach(function (l) { %>
+        <li data-done="<%= l.done %>" aria-current="<%= Number(l.id) === Number(lesson.id) %>">
+          <a href="/courses/<%= course.slug %>/lessons/<%= l.slug %>"><%= l.position %>. <%= l.title %></a>
+        </li>
+      <% }); %>
+    </ol>
+    <p class="spine-count"><%= completed %> of <%= total %> complete</p>
+  </aside>
+
+  <article class="lesson">
+    <h1><%= lesson.title %></h1>
+    <div class="meta lesson__meta">Lesson <%= lesson.position %> of <%= total %> · <%= lesson.minutes %> min</div>
+
+    <div class="prose">
+      <% paragraphs.forEach(function (p) { %><p><%= p %></p><% }); %>
+    </div>
+
+    <% if (question) { %>
+      <section class="check">
+        <h2>Check yourself</h2>
+        <form method="post" action="/lessons/<%= lesson.id %>/quiz">
+          <fieldset>
+            <legend><%= question.prompt %></legend>
+            <% question.options.forEach(function (opt, i) { %>
+              <label class="choice">
+                <input type="radio" name="choice" value="<%= i %>" required
+                       <%= result && result.choice === i ? 'checked' : '' %>>
+                <span><%= opt %></span>
+              </label>
+            <% }); %>
+          </fieldset>
+          <button class="btn btn--quiet" type="submit">Check answer</button>
+        </form>
+        <% if (result) { %>
+          <div class="verdict" data-correct="<%= result.correct %>">
+            <strong><%= result.correct ? 'Correct.' : 'Not this one.' %></strong>
+            <%= result.explanation %>
+          </div>
+        <% } %>
+      </section>
+    <% } %>
+
+    <div class="lesson__foot">
+      <% if (lesson.done) { %>
+        <span class="done-note">Marked complete</span>
+        <% if (next) { %><a class="btn" href="/courses/<%= course.slug %>/lessons/<%= next.slug %>">Next lesson</a><% } %>
+      <% } else { %>
+        <form method="post" action="/lessons/<%= lesson.id %>/complete">
+          <button class="btn" type="submit"><%= next ? 'Mark complete and continue' : 'Mark complete and finish' %></button>
+        </form>
+      <% } %>
+      <% if (prev) { %><a href="/courses/<%= course.slug %>/lessons/<%= prev.slug %>">Back to <%= prev.title %></a><% } %>
+    </div>
+  </article>
+</div>
+<%- include('partials/foot') %>
